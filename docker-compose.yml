@@ -1,0 +1,22 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    # command: tail -f /dev/null # to run container without Django's development server
+    volumes:
+      - ./backend:/service-code
+    ports:
+      - "80:8000"
+    depends_on:
+      - db
+
